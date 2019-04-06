@@ -24,13 +24,13 @@ You can download the Amazon Dataset from http://jmcauley.ucsd.edu/data/amazon.
 * Make sure the raw data, meta data are in the same direction.
 * Preprocessing data. Filter the review to each user having at least 10 transactions. Remove the words whose number is less than ```count```. Split the data into three sets and extract queries.
    ```
-   python extract.py --review_file --meta_file --count
+   python extract.py --review_file --meta_file --count=5
    ```
 * We leverage the PV-DM model to convert queries and product representations to the same latent space.
    ```
-   python doc2vec.py --dataset --embedding_size --window_size
+   python doc2vec.py --window_size=3
    ```
-* Now start training the model. 
+* Start training the model. 
    ```
-   python main.py --dataset --lr --num_steps --alpha
+   python main.py --lr=0.001 --num_steps=4 --alpha=0.9
    ```
