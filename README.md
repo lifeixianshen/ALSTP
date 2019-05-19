@@ -10,19 +10,13 @@ Yangyang Guo, Zhiyong Cheng, Liqiang Nie, Yinglong Wang, Junma and Mohan Kankanh
 You can download the Amazon Dataset from http://jmcauley.ucsd.edu/data/amazon.
 
 ## The requirements are as follows:
-* python==3.6
-
-* pandas==0.24.2
-
-* numpy==1.16.2
-
-* pytorch==0.4.1
-
-* tensorflow==1.7
-
-* gensim==3.7.1
-
-* tensorboardX==1.6
+	* python==3.6
+	* pandas==0.24.2
+	* numpy==1.16.2
+	* pytorch==0.4.1
+	* tensorflow==1.7
+	* gensim==3.7.1
+	* tensorboardX==1.6
 
 ## Example to Run
 * Make sure the raw data, meta data are in the same direction.
