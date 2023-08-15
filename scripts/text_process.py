@@ -7,8 +7,7 @@ def _remove_char(value):
 
     value = re.sub(
         '[\[\],!.;#$^*\_——<>/=%&?@"&\'-:]', ' ', str(value))
-    l_temp = [i for i in value.split()]
-    return l_temp
+    return list(value.split())
 
 
 def _remove_dup(l):
@@ -30,9 +29,7 @@ def _filter_words(l, count):
     """ Filter words in documents less than count. """
     cnt = collections.Counter()
     for sentence in l:
-        cnt.update(sentence)
+        cnt |= sentence
 
-    s = set(word for word in cnt if cnt[word] < count)
-    l_temp = [[word 
-        for word in sentence if word not in s] for sentence in l]
-    return l_temp
+    s = {word for word in cnt if cnt[word] < count}
+    return [[word for word in sentence if word not in s] for sentence in l]

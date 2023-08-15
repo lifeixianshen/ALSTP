@@ -7,15 +7,15 @@ stop_file = './stopwords.txt'
 
 processed_path = './processed/'
 
-full_path = processed_path + '{}_full.csv'.format(dataset)
-train_path = processed_path + '{}_train.csv'.format(dataset)
-test_path = processed_path + '{}_test.csv'.format(dataset)
+full_path = f'{processed_path}{dataset}_full.csv'
+train_path = f'{processed_path}{dataset}_train.csv'
+test_path = f'{processed_path}{dataset}_test.csv'
 
-asin_sample_path = processed_path + '{}_asin_sample.json'.format(dataset)
-user_bought_path = processed_path + '{}_user_bought.json'.format(dataset)
+asin_sample_path = f'{processed_path}{dataset}_asin_sample.json'
+user_bought_path = f'{processed_path}{dataset}_user_bought.json'
 
-doc2model_path = processed_path + '{}_doc2model'.format(dataset)
-query_path = processed_path + '{}_query.json'.format(dataset)
+doc2model_path = f'{processed_path}{dataset}_doc2model'
+query_path = f'{processed_path}{dataset}_query.json'
 
 # embedding size
 embed_size = 512

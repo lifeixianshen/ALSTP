@@ -83,21 +83,19 @@ class ALSTPData(object):
 		"""asin is the user's next tuple, when a user ends, reset asin to 0.
 		   This must be called after methods shuffle and next user.
 		"""
-		if self.is_training:
-			# save the last user and query_vec_u
-			if asin == self.u_len:
-				return (self.item_vec_u[asin: asin + self.num_steps],
-					    self.item_u[asin: asin + self.num_steps],
-					    self.query_vec_u[asin: asin + self.num_steps])
-			else:
-				return  (self.item_vec_u[asin: asin + self.num_steps],
-						 self.item_vec_u[asin + self.num_steps],
-						 self.neg_vecs_u[asin + self.num_steps],
-						 self.item_u[asin + self.num_steps],
-					     self.query_vec_u[asin: asin + self.num_steps],
-					     self.query_vec_u[asin + self.num_steps])
-
-		else:
+		if not self.is_training:
 			return (self.item_u[0], 
 					self.query_vec_u, 
 					self.text_query_u[0])
+		# save the last user and query_vec_u
+		if asin == self.u_len:
+			return (self.item_vec_u[asin: asin + self.num_steps],
+				    self.item_u[asin: asin + self.num_steps],
+				    self.query_vec_u[asin: asin + self.num_steps])
+		else:
+			return  (self.item_vec_u[asin: asin + self.num_steps],
+					 self.item_vec_u[asin + self.num_steps],
+					 self.neg_vecs_u[asin + self.num_steps],
+					 self.item_u[asin + self.num_steps],
+				     self.query_vec_u[asin: asin + self.num_steps],
+				     self.query_vec_u[asin + self.num_steps])

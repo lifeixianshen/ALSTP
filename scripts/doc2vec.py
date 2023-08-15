@@ -34,12 +34,12 @@ for k, v in zip(full_data.asin, full_data.reviewText):
 
 # concatenate the reviews together
 for k in raw_doc.keys():
-	m = [i for i in raw_doc[k]]
+	m = list(raw_doc[k])
 	m = list(itertools.chain.from_iterable(m))
 	raw_doc[k] = m
 
 # for query, it's hard to tag, so we just random tag them
-query_idx, query_dict = 0, {} 
+query_idx, query_dict = 0, {}
 for q in full_data['query_']:
 	if repr(q) not in query_dict:
 			query_dict[repr(q)] = query_idx
@@ -65,12 +65,12 @@ model = doc2vec.Doc2Vec(
 
 model.build_vocab(docs) # Building vocabulary
 
-for epoch in range(passes):
-    random.shuffle(docs)
+for _ in range(passes):
+	random.shuffle(docs)
 
-    model.alpha, model.min_alpha = alpha_val, alpha_val
-    model.train(docs, total_examples=len(docs), epochs=model.iter)
-    alpha_val -= alpha_delta
+	model.alpha, model.min_alpha = alpha_val, alpha_val
+	model.train(docs, total_examples=len(docs), epochs=model.iter)
+	alpha_val -= alpha_delta
 
 ############################### SAVE TO DISK ################################
 model.save(config.doc2model_path)

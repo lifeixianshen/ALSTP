@@ -20,9 +20,7 @@ def mrr(gt_item, pred_items):
 
 
 def hit(gt_item, pred_items):
-	if gt_item in pred_items:
-		return 1
-	return 0
+	return 1 if gt_item in pred_items else 0
 
 
 def ndcg(gt_item, pred_items):

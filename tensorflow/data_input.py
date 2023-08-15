@@ -81,30 +81,28 @@ class ALSTPData(object):
 		"""asin is the user's next tuple, when a user ends, reset asin to 0.
 		   This must be called after methods shuffle and next user.
 		"""
-		if self.is_training:
-			#Save the last asinVecUser and query_vec_user
-			if asin == self.length_user:
-				return (np.array(self.item_vec_user
-							[asin: asin + self.num_steps]),
-					    np.array(self.item_user
-					    		[asin: asin + self.num_steps]),
-					    np.array(self.query_vec_user
-					    		[asin: asin + self.num_steps]))
-			else:
-				return  (np.array(self.item_vec_user
-								[asin: asin + self.num_steps]),
-						 np.array(self.item_vec_user
-						 		[asin + self.num_steps]),
-						 np.array(self.neg_vecs_user
-						 		[asin + self.num_steps]),
-						 np.array(self.item_user
-						 		[asin + self.num_steps]),
-					     	 np.array(self.query_vec_user
-					     			[asin: asin + self.num_steps]),
-					         np.array(self.query_vec_user
-					     			[asin + self.num_steps]))
-
-		else:
+		if not self.is_training:
 			return (np.array(self.item_user[0]), 
 					np.array(self.query_vec_user), 
 					np.array(self.text_query_user[0]))
+		#Save the last asinVecUser and query_vec_user
+		if asin == self.length_user:
+			return (np.array(self.item_vec_user
+						[asin: asin + self.num_steps]),
+				    np.array(self.item_user
+				    		[asin: asin + self.num_steps]),
+				    np.array(self.query_vec_user
+				    		[asin: asin + self.num_steps]))
+		else:
+			return  (np.array(self.item_vec_user
+							[asin: asin + self.num_steps]),
+					 np.array(self.item_vec_user
+					 		[asin + self.num_steps]),
+					 np.array(self.neg_vecs_user
+					 		[asin + self.num_steps]),
+					 np.array(self.item_user
+					 		[asin + self.num_steps]),
+				     	 np.array(self.query_vec_user
+				     			[asin: asin + self.num_steps]),
+				         np.array(self.query_vec_user
+				     			[asin + self.num_steps]))

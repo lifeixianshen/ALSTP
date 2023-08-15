@@ -49,14 +49,13 @@ def train(train_data, valid_data, num_items, all_items, all_items_id):
 					num_items, FLAGS.regularizer, FLAGS.topK, is_training=True)
 		model.build()
 
-		ckpt = tf.train.get_checkpoint_state(FLAGS.model_dir)
-		if ckpt:
-			print("Reading model parameters from %s" % ckpt.model_checkpoint_path)
+		if ckpt := tf.train.get_checkpoint_state(FLAGS.model_dir):
+			print(f"Reading model parameters from {ckpt.model_checkpoint_path}")
 			model.saver.restore(sess, ckpt.model_checkpoint_path)
 		else:
 			print("Creating model with fresh parameters.")
 			sess.run(tf.global_variables_initializer())
-		
+
 		############################### Training ####################################
 		count = 0
 		for epoch in range(FLAGS.epochs):
@@ -82,7 +81,7 @@ def train(train_data, valid_data, num_items, all_items, all_items_id):
 						model.cons_global_interest(sess, state)
 
 					# slowly update global interest
-					if not itemidx == 0 and itemidx % FLAGS.num_steps == 0:
+					if itemidx != 0 and itemidx % FLAGS.num_steps == 0:
 						model.update_global_interest(sess, state)
 
 					outputs = model.step(sess, item_pre, item_target, query_pre,
@@ -121,7 +120,7 @@ def main(argv=None):
 	all_items_list, all_items_vec = [], []
 	for i in range(len(full_data.data)):
 		item = full_data.data['asin'][i]
-		if not item in all_items_list:
+		if item not in all_items_list:
 			all_items_list.append(item)
 			all_items_vec.append(full_data.data['item_vec'][i])
 

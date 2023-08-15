@@ -13,12 +13,8 @@ import text_process
 
 def get_df(path):
     """ Apply raw data to pandas DataFrame. """
-    i = 0
-    df = {}
     g = gzip.open(path, 'rb')
-    for line in g:
-        df[i] = eval(line)
-        i += 1
+    df = {i: eval(line) for i, line in enumerate(g)}
     return pd.DataFrame.from_dict(df, orient='index')
 
 
@@ -70,10 +66,9 @@ def split_data(df):
     user_length = df.groupby('reviewerID').size().tolist()
 
     for user in range(len(user_length)):
-        for _ in range((user_length[user] - 1)):
-            filters.append('Train')
+        filters.extend('Train' for _ in range((user_length[user] - 1)))
         filters.append('Test')
-    
+
     df['filter'] = filters
     df_train = df[df['filter'] == 'Train']
     df_test = df[df['filter'] == 'Test']
@@ -144,21 +139,34 @@ def main():
     df, df_train, df_test = split_data(df) 
 
     user_bought = get_user_bought(df_train)
-    json.dump(user_bought, open(os.path.join(config.processed_path, 
-            '{}_user_bought.json'.format(config.dataset)), 'w'))
- 
+    json.dump(
+        user_bought,
+        open(
+            os.path.join(
+                config.processed_path, f'{config.dataset}_user_bought.json'
+            ),
+            'w',
+        ),
+    )
+
     df = rm_test(df, df_test) # remove the reviews from test set.
 
     df = df.drop(['unixReviewTime', 'filter'], axis=1)
     df_train = df_train.drop(['unixReviewTime', 'filter'], axis=1)
     df_test = df_test.drop(['unixReviewTime', 'filter'], axis=1)
 
-    df.to_csv(os.path.join(
-        config.processed_path, '{}_full.csv'.format(config.dataset)), index=False)
-    df_train.to_csv(os.path.join(
-        config.processed_path, '{}_train.csv'.format(config.dataset)), index=False)
-    df_test.to_csv(os.path.join(
-        config.processed_path, '{}_test.csv'.format(config.dataset)), index=False)
+    df.to_csv(
+        os.path.join(config.processed_path, f'{config.dataset}_full.csv'),
+        index=False,
+    )
+    df_train.to_csv(
+        os.path.join(config.processed_path, f'{config.dataset}_train.csv'),
+        index=False,
+    )
+    df_test.to_csv(
+        os.path.join(config.processed_path, f'{config.dataset}_test.csv'),
+        index=False,
+    )
 
 
 if __name__ == "__main__":

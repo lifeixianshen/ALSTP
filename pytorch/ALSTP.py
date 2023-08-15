@@ -139,8 +139,7 @@ class ALSTP(nn.Module):
 			return pos_score, neg_scores
 		else:
 			all_items = F.elu(self.convert(all_items))
-			all_scores = F.cosine_similarity(all_items, concate_query)
-			return all_scores
+			return F.cosine_similarity(all_items, concate_query)
 
 
 def BPRLoss(pos_score, neg_scores):
@@ -223,24 +222,24 @@ def main():
 	all_items, all_item_vecs = [], []
 	for i in range(len(full_data.data)):
 		item = full_data.data['asin'][i]
-		if not item in all_items:
+		if item not in all_items:
 			all_items.append(item)
 			all_item_vecs.append(full_data.data['item_vec'][i])
 
 	writer = SummaryWriter() # for visualizing loss
 	writer_count = 0
-	
+
 	############################# START TRAINING #############################
 	for epoch in range(FLAGS.train_epoch):
 		train_data.neg_sample(FLAGS.negative_numbers)
-		model.train() 
+		model.train()
 		model.is_training = True
 		start_time = time.time()
 		(global_int_eval, item_pre_eval, query_vec_eval, 
 				item_id_eval) = ([] for _ in range(4)) # for evaluation
 
 		user_list = train_data.shuffle_user() # first shuffle all users
-		
+
 		for step, user in enumerate(user_list):
 			model.init_global_interest() # initializing global interest to zeros
 			item_len = train_data.next_user(user)
@@ -251,7 +250,7 @@ def main():
 				item_pre = torch.tensor(item_pre).cuda()
 				query_pre = torch.tensor(query_pre).cuda()
 				item_target = torch.tensor(
-							item_target).cuda().view(1, config.embed_size)             
+							item_target).cuda().view(1, config.embed_size)
 				query_target = torch.tensor(
 							query_target).cuda().view(1, config.embed_size)
 				negative_samples = torch.tensor(neg_vecs).cuda()
@@ -260,7 +259,7 @@ def main():
 					model.cons_global_interest()
 
 				# slowly update global interest
-				if not itemidx == 0 and itemidx % FLAGS.num_steps == 0:
+				if itemidx != 0 and itemidx % FLAGS.num_steps == 0:
 					model.update_global_interest()
 
 				model.zero_grad()

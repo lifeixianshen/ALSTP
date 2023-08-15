@@ -306,12 +306,11 @@ class ALSTP(object):
 	def step(self, sess, item_pre, item_target, query_pre, 
 					query_target, neg_samples, all_items, step):
 		""" Start trainging the model. """
-		input_feed = {}
-		input_feed[self.item_pre.name] = item_pre
-		input_feed[self.query_pre.name] = query_pre
-		input_feed[self.query_target.name] = query_target
-
-
+		input_feed = {
+			self.item_pre.name: item_pre,
+			self.query_pre.name: query_pre,
+			self.query_target.name: query_target,
+		}
 		if self.is_training:
 			input_feed[self.item_target.name] = item_target
 			input_feed[self.neg_samples.name] = neg_samples
